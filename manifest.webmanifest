@@ -1,0 +1,9 @@
+{
+  "name": "AUVYON \u2014 Your Digital Identity",
+  "short_name": "AUVYON",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#071321",
+  "theme_color": "#071321",
+  "description": "Your digital twin and virtual shopping experience."
+}

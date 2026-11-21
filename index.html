@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071321">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AUVYON">
+<link rel="manifest" href="manifest.webmanifest">
+<title>AUVYON — Your Digital Identity</title>
+<style>
+:root{--bg:#071321;--panel:#10243a;--panel2:#142b42;--cyan:#00d8ff;--muted:#91a8bc;--white:#f4f8fc}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#173b59 0%,var(--bg) 55%);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(86px + env(safe-area-inset-bottom))}
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 2px 18px}.brand{font-size:27px;letter-spacing:5px;font-weight:800}.brand span{color:var(--cyan)}.tag{font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:4px}.pill{border:1px solid #28516b;border-radius:30px;padding:7px 10px;font-size:10px;color:#8eeeff}
+main{max-width:620px;margin:auto}.eyebrow{color:var(--cyan);font-size:10px;letter-spacing:2px;font-weight:700}.hero h1{font-size:34px;line-height:1.1;margin:10px 0}.hero p,.muted{color:var(--muted);line-height:1.5;font-size:13px}.visual{margin:18px 0;background:linear-gradient(145deg,#14324b,#091827);border:1px solid #21435d;border-radius:22px;min-height:230px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.orb{width:160px;height:160px;border-radius:50%;border:1px solid #00c8f0;box-shadow:0 0 35px #00c8f044,inset 0 0 30px #00c8f022;display:flex;align-items:center;justify-content:center;position:relative}.orb:before,.orb:after{content:"";position:absolute;border:1px solid #00d8ff66;border-radius:50%;width:205px;height:75px;transform:rotate(28deg)}.orb:after{transform:rotate(-35deg);width:220px;height:95px}.silhouette{font-size:82px;filter:drop-shadow(0 0 12px #00d8ff88)}.visual-label{position:absolute;bottom:15px;left:18px;font-size:10px;letter-spacing:2px;color:#9bc9d8}
+.btn{border:0;border-radius:14px;background:linear-gradient(100deg,#00d8ff,#5ce9ff);color:#041521;font-weight:800;padding:15px 17px;width:100%;font-size:14px;cursor:pointer}.btn.secondary{background:#17334b;color:#eafaff;border:1px solid #28516b}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.tile,.card{background:linear-gradient(145deg,#132b42,#0d2033);border:1px solid #1e4058;border-radius:17px;padding:16px}.tile .ico{font-size:23px;color:var(--cyan)}.tile b{display:block;margin:8px 0 4px;font-size:13px}.tile small{color:var(--muted);font-size:11px}.section{display:none}.section.active{display:block}.section h2{font-size:24px;margin:10px 0}.nav{position:fixed;bottom:0;left:0;right:0;padding:10px 8px calc(10px + env(safe-area-inset-bottom));background:#071321ee;backdrop-filter:blur(18px);border-top:1px solid #1b3b53;display:flex;justify-content:space-around;z-index:5}.nav button{background:none;border:0;color:#829bb0;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:55px}.nav button span{font-size:19px}.nav button.active{color:var(--cyan)}.measure{display:flex;justify-content:space-between;padding:13px 2px;border-bottom:1px solid #244057;font-size:13px}.measure strong{color:white}.notice{background:#382e18;border:1px solid #76602a;color:#f5d98a;border-radius:12px;padding:12px;font-size:11px;line-height:1.45;margin-top:14px}.field{width:100%;background:#0a1b2b;color:white;border:1px solid #31516a;border-radius:12px;padding:13px;margin:7px 0 14px;font-size:14px}.outfit{display:flex;gap:8px;flex-wrap:wrap}.outfit button{background:#132b42;border:1px solid #31516a;color:white;padding:10px 13px;border-radius:22px}.outfit button.selected{border-color:var(--cyan);color:var(--cyan)}footer{text-align:center;color:#668095;font-size:9px;letter-spacing:1.5px;margin:28px 0 10px}
+</style>
+</head>
+<body>
+<header><div><div class="brand">AUVYON<span>.</span></div><div class="tag">YOURSELF, IN A NEW DIMENSION.</div></div><div class="pill">PROTOTYPE 0.1</div></header>
+<main>
+<section id="home" class="section active">
+ <div class="hero"><div class="eyebrow">WELCOME TO YOUR DIGITAL IDENTITY</div><h1>Your style.<br>Your body. Your world.</h1><p>Build your digital twin and explore a new way to shop.</p></div>
+ <div class="visual"><div class="orb"><div class="silhouette">♙</div></div><div class="visual-label">YOUR DIGITAL TWIN · 3D EXPERIENCE</div></div>
+ <button class="btn" onclick="show('scan')">＋ &nbsp; START BODY SCAN</button>
+ <div class="grid">
+  <div class="tile" onclick="show('avatar')"><div class="ico">◉</div><b>My Avatar</b><small>Your digital twin</small></div>
+  <div class="tile" onclick="show('tryon')"><div class="ico">◇</div><b>Virtual Try-On</b><small>Explore your style</small></div>
+  <div class="tile" onclick="show('measure')"><div class="ico">↔</div><b>Measurements</b><small>Your body profile</small></div>
+  <div class="tile" onclick="show('wardrobe')"><div class="ico">▤</div><b>My Wardrobe</b><small>Your saved looks</small></div>
+ </div>
+</section>
+<section id="scan" class="section">
+ <div class="eyebrow">AUVYON SCAN</div><h2>Create your Digital Twin</h2><p class="muted">This prototype prepares the scan workflow. Camera-based body reconstruction is not connected yet.</p>
+ <div class="visual"><div class="orb"><div class="silhouette">♙</div></div><div class="visual-label">360° BODY CAPTURE</div></div>
+ <label class="muted">Choose scan method</label><select class="field"><option>Guided video scan (planned)</option><option>Front + side photos (planned)</option></select>
+ <button class="btn" onclick="alert('Body scanning is not connected in this prototype yet. Next we will integrate a real 3D scanning SDK.')">BEGIN SCAN</button>
+ <div class="notice">Prototype note: this screen does not activate your camera or measure your body. Real scanning requires a compatible 3D scanning technology and validation.</div>
+</section>
+<section id="avatar" class="section">
+ <div class="eyebrow">YOUR DIGITAL IDENTITY</div><h2>My Avatar</h2><div class="visual"><div class="orb"><div class="silhouette">♙</div></div><div class="visual-label">DEMO AVATAR · NOT A BODY SCAN</div></div><p class="muted">Your personal 3D model will appear here after the scanning engine is integrated.</p><button class="btn secondary" onclick="show('scan')">CREATE MY AVATAR</button>
+</section>
+<section id="tryon" class="section">
+ <div class="eyebrow">AUVYON TRY-ON</div><h2>Explore your style</h2><p class="muted">Choose a look category. Real garment simulation will be added in a later build.</p>
+ <div class="outfit"><button class="selected" onclick="pick(this)">Casual</button><button onclick="pick(this)">Formal</button><button onclick="pick(this)">Sport</button><button onclick="pick(this)">Streetwear</button></div>
+ <div class="visual"><div class="orb"><div class="silhouette">♙</div></div><div class="visual-label">VIRTUAL FITTING ROOM · PREVIEW</div></div>
+ <div class="notice">Virtual clothing fit and size prediction are demo concepts only and are not active yet.</div>
+</section>
+<section id="measure" class="section">
+ <div class="eyebrow">BODY PROFILE</div><h2>Measurements</h2><p class="muted">Sample values from the scan screenshots shared in this conversation. Confirm them with a tape measure before relying on them.</p>
+ <div class="card"><div class="measure"><span>Waist</span><strong>91.6 cm</strong></div><div class="measure"><span>Stomach</span><strong>98.2 cm</strong></div><div class="measure"><span>Seat / hips</span><strong>104.3 cm</strong></div><div class="measure"><span>Left bicep</span><strong>32.6 cm</strong></div><div class="measure"><span>Left calf</span><strong>38.0 cm</strong></div></div>
+ <div class="notice">These are imported sample readings, not measurements independently verified by AUVYON.</div>
+</section>
+<section id="wardrobe" class="section">
+ <div class="eyebrow">YOUR PERSONAL COLLECTION</div><h2>My Wardrobe</h2><div class="visual"><div class="orb"><div class="silhouette">◇</div></div><div class="visual-label">YOUR STYLE COLLECTION</div></div><p class="muted">Your saved outfits and tried-on items will live here.</p><button class="btn secondary" onclick="show('tryon')">EXPLORE OUTFITS</button>
+</section>
+<footer>AUVYON © 2026 · YOUR DIGITAL FUTURE</footer>
+</main>
+<nav class="nav">
+<button class="active" data-page="home" onclick="show('home')"><span>⌂</span>Home</button>
+<button data-page="scan" onclick="show('scan')"><span>◎</span>Scan</button>
+<button data-page="avatar" onclick="show('avatar')"><span>♙</span>Avatar</button>
+<button data-page="tryon" onclick="show('tryon')"><span>◇</span>Try-On</button>
+<button data-page="measure" onclick="show('measure')"><span>↔</span>Measures</button>
+</nav>
+<script>
+function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'})}
+function pick(el){document.querySelectorAll('.outfit button').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
