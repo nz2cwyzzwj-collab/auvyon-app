@@ -9,7 +9,26 @@
 <meta name="apple-mobile-web-app-title" content="AUVYON">
 <link rel="manifest" href="manifest.webmanifest">
 <title>AUVYON — Your Digital Identity</title>
-<style>
+.camera-box{
+  width:100%;
+  background:#000;
+  border:1px solid #28516b;
+  border-radius:18px;
+  overflow:hidden;
+  margin:15px 0;
+}
+.camera-box video{
+  width:100%;
+  display:block;
+  min-height:250px;
+  object-fit:cover;
+}
+.camera-status{
+  color:#91a8bc;
+  font-size:12px;
+  padding:10px;
+}
+ <style>
 :root{--bg:#071321;--panel:#10243a;--panel2:#142b42;--cyan:#00d8ff;--muted:#91a8bc;--white:#f4f8fc}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#173b59 0%,var(--bg) 55%);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(86px + env(safe-area-inset-bottom))}
 header{display:flex;justify-content:space-between;align-items:center;padding:20px 2px 18px}.brand{font-size:27px;letter-spacing:5px;font-weight:800}.brand span{color:var(--cyan)}.tag{font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:4px}.pill{border:1px solid #28516b;border-radius:30px;padding:7px 10px;font-size:10px;color:#8eeeff}
@@ -31,7 +50,51 @@ main{max-width:620px;margin:auto}.eyebrow{color:var(--cyan);font-size:10px;lette
   <div class="tile" onclick="show('wardrobe')"><div class="ico">▤</div><b>My Wardrobe</b><small>Your saved looks</small></div>
  </div>
 </section>
+
 <section id="scan" class="section">
+ <div class="eyebrow">AUVYON SCAN 0.2</div>
+ <h2>Create your Digital Twin</h2>
+ <p class="muted">Position your phone, stand in full view and slowly rotate 360°.</p>
+
+ <div class="camera-box">
+  <video id="camera" autoplay muted playsinline></video>
+  <div id="cameraStatus" class="camera-status">
+   Camera is not active.
+  </div>
+ </div>
+
+ <button class="btn secondary" onclick="startCamera()">
+  ACTIVATE CAMERA
+ </button>
+
+ <div class="notice">
+  Stand approximately 2–3 metres from the phone.
+  Make sure your full body is visible. Keep your arms
+  slightly away from your body and rotate slowly.
+ </div>
+
+ <button class="btn" style="margin-top:14px"
+  onclick="startRecording()" id="recordBtn">
+  START 360° VIDEO
+ </button>
+
+ <button class="btn secondary" style="margin-top:10px"
+  onclick="stopRecording()" id="stopBtn" disabled>
+  STOP RECORDING
+ </button>
+
+ <a id="downloadVideo" class="btn"
+  style="display:none;margin-top:10px;text-align:center;text-decoration:none">
+  SAVE VIDEO TO IPHONE
+ </a>
+
+ <div class="notice">
+  Prototype 0.2: This records a video only.
+  Automatic 3D reconstruction and body measurements
+  are not connected yet.
+ </div>
+</section>
+
  <div class="eyebrow">AUVYON SCAN</div><h2>Create your Digital Twin</h2><p class="muted">This prototype prepares the scan workflow. Camera-based body reconstruction is not connected yet.</p>
  <div class="visual"><div class="orb"><div class="silhouette">♙</div></div><div class="visual-label">360° BODY CAPTURE</div></div>
  <label class="muted">Choose scan method</label><select class="field"><option>Guided video scan (planned)</option><option>Front + side photos (planned)</option></select>
@@ -64,7 +127,148 @@ main{max-width:620px;margin:auto}.eyebrow{color:var(--cyan);font-size:10px;lette
 <button data-page="tryon" onclick="show('tryon')"><span>◇</span>Try-On</button>
 <button data-page="measure" onclick="show('measure')"><span>↔</span>Measures</button>
 </nav>
-<script>
+
+let cameraStream = null;
+let mediaRecorder = null;
+let recordedChunks = [];
+
+async function startCamera(){
+  const video = document.getElementById('camera');
+  const status = document.getElementById('cameraStatus');
+
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: { ideal: "environment" },
+        width: { ideal: 1920 },
+        height: { ideal: 1080 }
+      },
+      audio: false
+    });
+
+    video.srcObject = cameraStream;
+    await video.play();
+
+    status.textContent = "Camera active. Full body should be visible.";
+  } catch(error) {
+    status.textContent = "Camera error: " + error.message;
+  }
+}
+
+function startRecording(){
+  if(!cameraStream){
+    alert("Please activate the camera first.");
+    return;
+  }
+
+  if(!window.MediaRecorder){
+    alert("Video recording is not supported by this browser.");
+    return;
+  }
+
+  recordedChunks = [];
+
+  let mimeType = "";
+  const types = [
+    "video/mp4",
+    "video/webm"
+  ];
+
+  for(const type of types){
+    if(MediaRecorder.isTypeSupported(type)){
+      mimeType = type;
+      break;
+    }
+  }
+
+  try {
+    mediaRecorder = new MediaRecorder(
+      cameraStream,
+      mimeType ? { mimeType } : undefined
+    );
+
+    mediaRecorder.ondataavailable = event => {
+      if(event.data && event.data.size > 0){
+        recordedChunks.push(event.data);
+      }
+    };
+
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(recordedChunks, {
+        type: mediaRecorder.mimeType || "video/mp4"
+      });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.getElementById("downloadVideo");
+
+      link.href = url;
+      link.download = "auvyon-360-scan";
+      link.style.display = "block";
+
+      document.getElementById("cameraStatus").textContent =
+        "Recording complete. Save your video.";
+
+    };
+
+    mediaRecorder.start();
+
+    document.getElementById("recordBtn").disabled = true;
+    document.getElementById("stopBtn").disabled = false;
+    document.getElementById("cameraStatus").textContent =
+      "Recording... Slowly rotate 360 degrees.";
+
+  } catch(error) {
+    alert("Recording error: " + error.message);
+  }
+}
+
+function stopRecording(){
+  if(mediaRecorder && mediaRecorder.state === "recording"){
+    mediaRecorder.stop();
+  }
+
+  document.getElementById("recordBtn").disabled = false;
+  document.getElementById("stopBtn").disabled = true;
+}
+
+function stopCamera(){
+  if(cameraStream){
+    cameraStream.getTracks().forEach(track => track.stop());
+    cameraStream = null;
+  }
+}
+
+function show(id){
+  document.querySelectorAll('.section').forEach(s =>
+    s.classList.toggle('active', s.id === id)
+  );
+
+  document.querySelectorAll('.nav button').forEach(b =>
+    b.classList.toggle('active', b.dataset.page === id)
+  );
+
+  if(id !== "scan"){
+    if(mediaRecorder && mediaRecorder.state === "recording"){
+      mediaRecorder.stop();
+    }
+    stopCamera();
+  }
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function pick(el){
+  document.querySelectorAll('.outfit button').forEach(b =>
+    b.classList.remove('selected')
+  );
+  el.classList.add('selected');
+}
+
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+</script>
+
 function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'})}
 function pick(el){document.querySelectorAll('.outfit button').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
 if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
